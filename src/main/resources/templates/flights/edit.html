@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:thymes="http://www.thymeleaf.org/extras/java8time">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier un Vol</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">✏️ Modifier un Vol</h2>
+
+    <form th:action="@{/flights/edit}" th:object="${flight}" method="post" class="border p-4 rounded shadow-sm bg-light">
+        <!-- Numéro de vol (readonly) -->
+        <div class="mb-3">
+            <label class="form-label">Numéro de vol</label>
+            <input type="text" th:field="*{flightNumber}" class="form-control" readonly />
+        </div>
+
+        <!-- Avion -->
+        <div class="mb-3">
+            <label class="form-label">Avion</label>
+            <select name="airplaneId" class="form-select" required>
+                <option value="">-- Sélectionner un avion --</option>
+                <option th:each="a : ${airplanes}" 
+                        th:value="${a.id}" 
+                        th:text="${a.name}" 
+                        th:selected="${flight.airplane?.id == a.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Ville de départ -->
+        <div class="mb-3">
+            <label class="form-label">Ville de départ</label>
+            <select name="departureCityId" class="form-select" required>
+                <option value="">-- Sélectionner une ville --</option>
+                <option th:each="c : ${cities}" 
+                        th:value="${c.id}" 
+                        th:text="${c.name}" 
+                        th:selected="${flight.departureCity?.id == c.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Ville d’arrivée -->
+        <div class="mb-3">
+            <label class="form-label">Ville d'arrivée</label>
+            <select name="arrivalCityId" class="form-select" required>
+                <option value="">-- Sélectionner une ville --</option>
+                <option th:each="c : ${cities}" 
+                        th:value="${c.id}" 
+                        th:text="${c.name}" 
+                        th:selected="${flight.arrivalCity?.id == c.id}">
+                </option>
+            </select>
+        </div>
+
+        <!-- Date/Heure de départ -->
+        <div class="mb-3">
+            <label class="form-label">Date et Heure de départ</label>
+            <input type="datetime-local"
+                   name="departureTime"
+                   class="form-control"
+                   th:value="${#temporals.format(flight.departureTime, 'yyyy-MM-dd''T''HH:mm')}" required />
+        </div>
+
+        <!-- Date/Heure d’arrivée -->
+        <div class="mb-3">
+            <label class="form-label">Date et Heure d'arrivée</label>
+            <input type="datetime-local"
+                   name="arrivalTime"
+                   class="form-control"
+                   th:value="${#temporals.format(flight.arrivalTime, 'yyyy-MM-dd''T''HH:mm')}" required />
+        </div>
+
+        <!-- Boutons -->
+        <div class="d-flex justify-content-between">
+            <a href="/flights" class="btn btn-secondary">↩ Retour</a>
+            <button type="submit" class="btn btn-success">💾 Enregistrer les modifications</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>
